@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Gestión de Préstamos - Dimanor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://sgcweb.s3.wasabisys.com/constructionequipment/s3fs-public/John%20Deere%20470G%20LC%20excavator%20web.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            text-align: center;
+            color: #000;
+            font-size: 24px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #000;
+        }
+        .logo img {
+            max-width: 200px;
+            height: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .form-group select {
+            cursor: pointer;
+        }
+        .form-group .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group .btn:hover {
+            background-color: #333;
+        }
+        .btn-ver-lista, .btn-ver-eliminados {
+            background-color: #000;
+            margin-top: 10px;
+        }
+        .btn-ver-lista:hover, .btn-ver-eliminados:hover {
+            background-color: #333;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #000;
+            color: #fff;
+        }
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .edit-btn, .delete-btn, .recover-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #FF9800;
+            color: #fff;
+        }
+        .delete-btn {
+            background-color: #F44336;
+            color: #fff;
+        }
+        .recover-btn {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        .prestada {
+            background-color: #F44336;
+            color: #fff;
+        }
+        .devuelta {
+            background-color: #8BC34A;
+            color: #fff;
+        }
+        .sin_datos {
+            background-color: #FFFFFF;
+            color: #000;
+        }
+        .notificacion {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="registro-container">
+        <div class="logo">
+            <img src="https://www.dimanor.com.mx/site/wp-content/uploads/2024/04/Logo_DIMANOR_Blanco-300x98.png" alt="Logo">
+        </div>
+        <h2>Registro de Préstamo</h2>
+        <form id="prestamoForm">
+            <div class="form-group">
+                <label for="fechaPrestamo">Fecha de préstamo:</label>
+                <input type="date" id="fechaPrestamo" name="fechaPrestamo" required>
+            </div>
+            <div class="form-group">
+                <label for="tecnicoResponsable">Técnico responsable:</label>
+                <input type="text" id="tecnicoResponsable" name="tecnicoResponsable" required>
+            </div>
+            <div class="form-group">
+                <label for="nombrePieza">Nombre de la pieza:</label>
+                <input type="text" id="nombrePieza" name="nombrePieza" required>
+            </div>
+            <div class="form-group">
+                <label for="numeroParte">Número de parte:</label>
+                <input type="text" id="numeroParte" name="numeroParte" required oninput="this.value = this.value.toUpperCase()">
+            </div>
+            <div class="form-group">
+                <label for="fechaDevolucion">Fecha de devolución esperada:</label>
+                <input type="date" id="fechaDevolucion" name="fechaDevolucion" required>
+            </div>
+            <div class="form-group">
+                <label for="estadoActual">Estado actual:</label>
+                <select id="estadoActual" name="estadoActual" required>
+                    <option value="prestada">Prestada</option>
+                    <option value="devuelta">Devuelta</option>
+                    <option value="sin_datos">Sin datos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comentarios">Comentarios:</label>
+                <textarea id="comentarios" name="comentarios"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn" onclick="guardarPrestamo()">Guardar</button>
+                <button type="button" class="btn btn-ver-lista" onclick="mostrarLista()">Ver lista de préstamos</button>
+            </div>
+                    <button type="button" onclick="window.location.href='main.html'">Regresar</button>
+        </form>
+    </div>
+
+    <div class="container" id="lista-container" style="display:none;">
+        <div class="logo">
+            <img src="https://www.dimanor.com.mx/site/wp-content/uploads/2024/04/Logo_DIMANOR_Blanco-300x98.png" alt="Logo">
+        </div>
+        <h2>Lista de Préstamos</h2>
+        <button class="btn" onclick="mostrarRegistro()">Registrar nuevo préstamo</button>
+        <div class="search-bar">
+            <input type="text" id="searchInputLista" onkeyup="buscarPorTecnicoLista()" placeholder="Buscar por técnico responsable...">
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha de Préstamo</th>
+                        <th>Técnico Responsable</th>
+                        <th>Nombre de la Pieza</th>
+                        <th>Número de Parte</th>
+                        <th>Fecha de Devolución</th>
+                        <th>Estado Actual</th>
+                        <th>Comentarios</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="prestamosBody">
+                    <!-- Datos de préstamos se insertarán aquí -->
+                </tbody>
+            </table>
+        </div>
+        <h2 id="eliminadosTitulo" style="display:none;">Lista de Eliminados</h2>
+        <div class="search-bar" id="eliminadosSearch" style="display:none;">
+            <input type="text" id="searchInputEliminados" onkeyup="buscarEliminadosPorTecnico()" placeholder="Buscar por técnico responsable...">
+        </div>
+        <div class="table-container" id="eliminados-container" style="display:none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha de Préstamo</th>
+                        <th>Técnico Responsable</th>
+                        <th>Nombre de la Pieza</th>
+                        <th>Número de Parte</th>
+                        <th>Fecha de Devolución</th>
+                        <th>Estado Actual</th>
+                        <th>Comentarios</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="eliminadosBody">
+                    <!-- Datos de préstamos eliminados se insertarán aquí -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="notificacion" id="notificacion"></div>
+
+    <script>
+        let prestamos = JSON.parse(localStorage.getItem('prestamos')) || [];
+        let eliminados = JSON.parse(localStorage.getItem('eliminados')) || [];
+        let searchQueryLista = '';
+        let searchQueryEliminados = '';
+
+        function mostrarNotificacion(mensaje) {
+            const notificacion = document.getElementById('notificacion');
+            notificacion.textContent = mensaje;
+            notificacion.style.display = 'block';
+            setTimeout(() => {
+                notificacion.style.display = 'none';
+            }, 3000);
+        }
+
+        function guardarPrestamo() {
+            const fechaPrestamo = document.getElementById('fechaPrestamo').value;
+            const tecnicoResponsable = document.getElementById('tecnicoResponsable').value;
+            const nombrePieza = document.getElementById('nombrePieza').value;
+            const numeroParte = document.getElementById('numeroParte').value;
+            const fechaDevolucion = document.getElementById('fechaDevolucion').value;
+            const estadoActual = document.getElementById('estadoActual').value;
+            const comentarios = document.getElementById('comentarios').value;
+
+            if (fechaPrestamo && tecnicoResponsable && nombrePieza && numeroParte && fechaDevolucion && estadoActual) {
+                const prestamoData = {
+                    fechaPrestamo,
+                    tecnicoResponsable,
+                    nombrePieza,
+                    numeroParte,
+                    fechaDevolucion,
+                    estadoActual,
+                    comentarios
+                };
+
+                prestamos.push(prestamoData);
+                localStorage.setItem('prestamos', JSON.stringify(prestamos));
+
+                mostrarNotificacion('Préstamo registrado con éxito');
+                document.getElementById('prestamoForm').reset();
+            } else {
+                mostrarNotificacion('Por favor, completa todos los campos.');
+            }
+        }
+
+        function mostrarLista() {
+            document.getElementById('registro-container').style.display = 'none';
+            document.getElementById('lista-container').style.display = 'block';
+            mostrarPrestamos();
+            mostrarEliminadosData();
+        }
+
+        function mostrarRegistro() {
+            document.getElementById('registro-container').style.display = 'block';
+            document.getElementById('lista-container').style.display = 'none';
+        }
+
+        function toggleEliminados() {
+            const eliminadosContainer = document.getElementById('eliminados-container');
+            const eliminadosTitulo = document.getElementById('eliminadosTitulo');
+            const eliminadosSearch = document.getElementById('eliminadosSearch');
+            const isHidden = eliminadosContainer.style.display === 'none';
+            eliminadosContainer.style.display = isHidden ? 'block' : 'none';
+            eliminadosTitulo.style.display = isHidden ? 'block' : 'none';
+            eliminadosSearch.style.display = isHidden ? 'block' : 'none';
+        }
+
+        function mostrarPrestamos() {
+            const tbody = document.getElementById('prestamosBody');
+            tbody.innerHTML = '';
+
+            prestamos.forEach((prestamo, index) => {
+                if (prestamo.tecnicoResponsable.toLowerCase().includes(searchQueryLista)) {
+                    const row = document.createElement('tr');
+                    row.className = prestamo.estadoActual === 'prestada' ? 'prestada' : (prestamo.estadoActual === 'devuelta' ? 'devuelta' : 'sin_datos');
+
+                    row.innerHTML = `
+                        <td>${prestamo.fechaPrestamo}</td>
+                        <td>${prestamo.tecnicoResponsable}</td>
+                        <td>${prestamo.nombrePieza}</td>
+                        <td>${prestamo.numeroParte}</td>
+                        <td>${prestamo.fechaDevolucion}</td>
+                        <td>
+                            <select onchange="cambiarEstado(${index}, this.value)">
+                                <option value="prestada" ${prestamo.estadoActual === 'prestada' ? 'selected' : ''}>Prestada</option>
+                                <option value="devuelta" ${prestamo.estadoActual === 'devuelta' ? 'selected' : ''}>Devuelta</option>
+                                <option value="sin_datos" ${prestamo.estadoActual === 'sin_datos' ? 'selected' : ''}>Sin datos</option>
+                            </select>
+                        </td>
+                        <td>${prestamo.comentarios}</td>
+                        <td>
+                            <button class="delete-btn" onclick="moverAEliminados(${index})">Eliminar</button>
+                        </td>
+                    `;
+
+                    tbody.appendChild(row);
+                }
+            });
+        }
+
+        function cambiarEstado(index, nuevoEstado) {
+            prestamos[index].estadoActual = nuevoEstado;
+            localStorage.setItem('prestamos', JSON.stringify(prestamos));
+            mostrarPrestamos();
+        }
+
+        function moverAEliminados(index) {
+            if (confirm('¿Estás seguro de que deseas eliminar este préstamo?')) {
+                eliminados.push(prestamos[index]);
+                localStorage.setItem('eliminados', JSON.stringify(eliminados));
+                prestamos.splice(index, 1);
+                localStorage.setItem('prestamos', JSON.stringify(prestamos));
+                mostrarNotificacion('Préstamo eliminado');
+                mostrarPrestamos();
+                mostrarEliminadosData();
+            }
+        }
+
+        function buscarPorTecnicoLista() {
+            searchQueryLista = document.getElementById('searchInputLista').value.toLowerCase();
+            mostrarPrestamos();
+        }
+
+        function mostrarEliminadosData() {
+            const tbody = document.getElementById('eliminadosBody');
+            tbody.innerHTML = '';
+
+            eliminados.forEach((prestamo, index) => {
+                if (prestamo.tecnicoResponsable.toLowerCase().includes(searchQueryEliminados)) {
+                    const row = document.createElement('tr');
+                    row.className = prestamo.estadoActual === 'prestada' ? 'prestada' : (prestamo.estadoActual === 'devuelta' ? 'devuelta' : 'sin_datos');
+
+                    row.innerHTML = `
+                        <td>${prestamo.fechaPrestamo}</td>
+                        <td>${prestamo.tecnicoResponsable}</td>
+                        <td>${prestamo.nombrePieza}</td>
+                        <td>${prestamo.numeroParte}</td>
+                        <td>${prestamo.fechaDevolucion}</td>
+                        <td>
+                            <select disabled>
+                                <option value="prestada" ${prestamo.estadoActual === 'prestada' ? 'selected' : ''}>Prestada</option>
+                                <option value="devuelta" ${prestamo.estadoActual === 'devuelta' ? 'selected' : ''}>Devuelta</option>
+                                <option value="sin_datos" ${prestamo.estadoActual === 'sin_datos' ? 'selected' : ''}>Sin datos</option>
+                            </select>
+                        </td>
+                        <td>${prestamo.comentarios}</td>
+                        <td>
+                            <button class="recover-btn" onclick="recuperarEliminado(${index})">Recuperar</button>
+                        </td>
+                    `;
+
+                    tbody.appendChild(row);
+                }
+            });
+        }
+
+        function recuperarEliminado(index) {
+            if (confirm('¿Estás seguro de que deseas recuperar este préstamo?')) {
+                prestamos.push(eliminados[index]);
+                localStorage.setItem('prestamos', JSON.stringify(prestamos));
+                eliminados.splice(index, 1);
+                localStorage.setItem('eliminados', JSON.stringify(eliminados));
+                mostrarNotificacion('Préstamo recuperado');
+                mostrarEliminadosData();
+                mostrarPrestamos();
+            }
+        }
+
+        function buscarEliminadosPorTecnico() {
+            searchQueryEliminados = document.getElementById('searchInputEliminados').value.toLowerCase();
+            mostrarEliminadosData();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            mostrarRegistro();
+        });
+    </script>
+</body>
+</html>

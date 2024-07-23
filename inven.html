@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('images/background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #000000;
+        }
+        input[type="text"], input[type="number"], select {
+            padding: 8px;
+            margin: 5px;
+            width: calc(100% - 20px);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #367C2B;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #2b5e1e;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #367C2B;
+            color: #ffffff;
+        }
+        td {
+            background-color: #ffffff;
+            text-align: center;
+        }
+        .delete-btn {
+            background-color: #fff;
+            color: #f44336;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .delete-btn:hover {
+            background-color: #f44336;
+            color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 100px;
+            margin-right: 20px;
+        }
+        .search-container {
+            margin-top: 20px;
+        }
+        .scroll-btn {
+            background-color: #367C2B;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            position: fixed;
+            bottom: 20px;
+        }
+        .scroll-btn:hover {
+            background-color: #2b5e1e;
+        }
+        #scrollTop {
+            right: 20px;
+        }
+        #scrollBottom {
+            right: 20px;
+            bottom: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="images/john-deere-logo.png" alt="John Deere Logo" class="logo">
+            <h2></h2>
+        </div>
+        <form id="inventoryForm">
+            <label for="nombre">Nombre de la pieza:</label><br>
+            <input type="text" id="nombre" name="nombre" required oninput="this.value = this.value.toUpperCase();"><br>
+            <label for="numero">Número de parte:</label><br>
+            <input type="text" id="numero" name="numero" required oninput="this.value = this.value.toUpperCase();"><br>
+            <label for="cantidad">Cantidad:</label><br>
+            <input type="number" id="cantidad" name="cantidad" min="1" required><br>
+            <label for="ubicacion">Ubicación Almacén:</label><br>
+            <input type="text" id="ubicacion" name="ubicacion" required oninput="this.value = this.value.toUpperCase();"><br>
+            <label for="sucursal">Sucursal:</label><br>
+            <select id="sucursal" name="sucursal" required>
+                <option value="Chihuahua">Chihuahua</option>
+                <option value="Juarez">Juarez</option>
+                <option value="Cuactemoc">Cuactemoc</option>
+                <option value="Delicias">Delicias</option>
+                <option value="Parral">Parral</option>
+                <option value="Casas Grandes">Casas Grandes</option>
+                <option value="Villa Ahumada">Villa Ahumada</option>
+                <option value="Asension">Asension</option>
+                <option value="Valle la Esperanza">Valle la Esperanza</option>
+                <option value="Camargo">Camargo</option>
+                <option value="Jimenez">Jimenez</option>
+                <option value="Oasis">Oasis</option>
+                <option value="Hermosillo">Hermosillo</option>
+                <option value="Culiacan">Culiacan</option>
+                <option value="Cabos">Cabos</option>
+                <option value="Tijuana">Tijuana</option>
+            </select><br>
+            <button type="submit">Agregar a lista</button>
+            <button type="button" onclick="window.location.href='main.html'">Regresar</button>
+        </form>
+
+        <div class="search-container">
+            <label for="search">Buscar por Número de parte:</label><br>
+            <input type="text" id="search" oninput="searchInventory()">
+        </div>
+
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Número de parte</th>
+                    <th>Cantidad</th>
+                    <th>Ubicación Almacén</th>
+                    <th>Sucursal</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryBody">
+                <!-- Aquí se mostrarán las filas de la tabla -->
+            </tbody>
+        </table>
+
+        <button id="exportBtn">Exportar a Excel</button>
+    </div>
+
+    <button id="scrollTop" class="scroll-btn" onclick="scrollToTop()">Arriba</button>
+    <button id="scrollBottom" class="scroll-btn" onclick="scrollToBottom()">Abajo</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+    <script>
+        // Arreglo para almacenar los elementos del inventario
+        let inventory = [];
+
+        // Función para cargar el inventario desde localStorage
+        function loadInventory() {
+            const storedInventory = localStorage.getItem('inventory');
+            if (storedInventory) {
+                inventory = JSON.parse(storedInventory);
+                displayInventory();
+            }
+        }
+
+        // Función para guardar el inventario en localStorage
+        function saveInventory() {
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+        }
+
+        // Función para agregar un elemento al inventario
+        function addToInventory(event) {
+            event.preventDefault();
+
+            // Obtener los valores del formulario
+            let nombre = document.getElementById('nombre').value;
+            let numero = document.getElementById('numero').value;
+            let cantidad = document.getElementById('cantidad').value;
+            let ubicacion = document.getElementById('ubicacion').value;
+            let sucursal = document.getElementById('sucursal').value;
+
+            // Crear un objeto con la información
+            let item = {
+                nombre: nombre,
+                numero: numero,
+                cantidad: cantidad,
+                ubicacion: ubicacion,
+                sucursal: sucursal
+            };
+
+            // Agregar el objeto al arreglo
+            inventory.push(item);
+
+            // Guardar el inventario en localStorage
+            saveInventory();
+
+            // Limpiar el formulario
+            document.getElementById('inventoryForm').reset();
+
+            // Llamar a la función para mostrar la lista actualizada
+            displayInventory();
+        }
+
+        // Función para mostrar la lista de inventario en la tabla
+        function displayInventory(filteredInventory) {
+            let tableBody = document.getElementById('inventoryBody');
+            tableBody.innerHTML = ''; // Limpiar el contenido previo de la tabla
+
+            (filteredInventory || inventory).forEach(function(item, index) {
+                let row = tableBody.insertRow();
+
+                let nombreCell = row.insertCell(0);
+                let numeroCell = row.insertCell(1);
+                let cantidadCell = row.insertCell(2);
+                let ubicacionCell = row.insertCell(3);
+                let sucursalCell = row.insertCell(4);
+                let deleteCell = row.insertCell(5);
+
+                nombreCell.textContent = item.nombre;
+                numeroCell.textContent = item.numero;
+                cantidadCell.textContent = item.cantidad;
+                ubicacionCell.textContent = item.ubicacion;
+                sucursalCell.textContent = item.sucursal;
+
+                let deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Eliminar';
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.addEventListener('click', function() {
+                    deleteItem(index);
+                });
+
+                deleteCell.appendChild(deleteBtn);
+            });
+        }
+
+        // Función para eliminar un elemento del inventario
+        function deleteItem(index) {
+            inventory.splice(index, 1);
+            saveInventory();
+            displayInventory();
+        }
+
+        // Función para buscar en el inventario
+        function searchInventory() {
+            let searchTerm = document.getElementById('search').value.toUpperCase();
+            let filteredInventory = inventory.filter(item => item.numero.includes(searchTerm));
+            displayInventory(filteredInventory);
+        }
+
+        // Función para exportar el inventario a Excel
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            let ws = XLSX.utils.json_to_sheet(inventory);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Inventario");
+            XLSX.writeFile(wb, "inventario.xlsx");
+        });
+
+        // Funciones para desplazarse hacia arriba y hacia abajo
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToBottom() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Cargar el inventario al iniciar la página
+        window.onload = loadInventory;
+
+        // Agregar evento de envío al formulario
+        document.getElementById('inventoryForm').addEventListener('submit', addToInventory);
+    </script>
+</body>
+</html>

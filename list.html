@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Piezas de Garantía - John Deere</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <header>
+        <img src="images/john-deere-logo.png" alt="Logo John Deere" class="logo">
+        <h1>Lista de Piezas de Garantía</h1>
+    </header>
+    <main>
+        <section class="table-section">
+            <div class="search-container">
+                <input type="text" id="buscarCliente" placeholder="Buscar por Cliente">
+                <input type="text" id="buscarReclamacion" placeholder="Buscar por Número de Reclamación">
+            </div>
+            <div class="table-container">
+                <table id="tablaPiezas">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>No. Reclamación</th>
+                            <th>Cliente</th>
+                            <th>Máquina</th>
+                            <th>No. Serie</th>
+                            <th>Pieza</th>
+                            <th>Avería</th>
+                            <th>No. Parte</th>
+                            <th>Cantidad</th>
+                            <th>Sucursal</th>
+                            <th>Ubicación</th>
+                            <th>Imagen</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Aquí se cargarán dinámicamente las filas de la tabla -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="actions">
+                <button onclick="descargarExcel()">Descargar Excel</button>
+                <button onclick="window.location.href='main.html'">Regresar</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 John Deere. Todos los derechos reservados.</p>
+    </footer>
+    <script src="scripts/list.js"></script>
+</body>
+</html>

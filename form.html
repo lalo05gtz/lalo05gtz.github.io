@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formato de Identificación de Piezas de Garantía - John Deere</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/john-deere-logo.png" alt="Logo John Deere">
+            <h1>Formato de Identificación de Piezas</h1>
+        </header>
+        <main>
+            <form id="formulario">
+                <table>
+                    <tr>
+                        <td><label for="fechaDocumento">Fecha de Documento:</label></td>
+                        <td><input type="date" id="fechaDocumento" required></td>
+                        <td><label for="numeroReclamacion">Número de Reclamación:</label></td>
+                  <td><input type="text" id="numeroReclamacion" required></td>
+                </tr>
+                <tr>
+                        <td><label for="nombreCliente">Nombre del Cliente:</label></td>
+                        <td colspan="3"><input type="text" id="nombreCliente" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tipoMaquina">Tipo de Máquina:</label></td>
+                        <td><input type="text" id="tipoMaquina" required></td>
+                        <td><label for="numeroSerie">Número de Serie:</label></td>
+                        <td><input type="text" id="numeroSerie" oninput="this.value = this.value.toUpperCase()" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="piezaAveriada">Pieza Averiada:</label></td>
+                        <td colspan="3"><input type="text" id="piezaAveriada" required></td>
+                    </tr>
+                    <tr>
+                      <td><label for="descripcionAveria">Descripción de la Avería:</label></td>
+                          <td colspan="3"><textarea id="descripcionAveria" class="expanding-input" required></textarea></td>
+                      </tr>
+                    </tr>
+                    <tr>
+                        <td><label for="numeroParte">Número de Parte:</label></td>
+                        <td><input type="text" id="numeroParte" oninput="this.value = this.value.toUpperCase()" required></td>
+                        <td><label for="cantidad">Cantidad:</label></td>
+                        <td><input type="number" id="cantidad" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="sucursal">Sucursal:</label></td>
+                        <td colspan="3">
+                            <select id="sucursal" required>
+                                <option value="">Seleccione una Sucursal</option>
+                                <option value="Chihuahua">Chihuahua</option>
+                                <option value="Juarez">Juarez</option>
+                                <option value="Cuactemoc">Cuactemoc</option>
+                                <option value="Delicias">Delicias</option>
+                                <option value="Parral">Parral</option>
+                                <option value="Casas Grandes">Casas Grandes</option>
+                                <option value="Villa Ahumada">Villa Ahumada</option>
+                                <option value="Asension">Asension</option>
+                                <option value="Valle la Esperanza">Valle la Esperanza</option>
+                                <option value="Camargo">Camargo</option>
+                                <option value="Jimenez">Jimenez</option>
+                                <option value="Oasis">Oasis</option>
+                                <option value="Hermosillo">Hermosillo</option>
+                                <option value="Culiacan">Culiacan</option>
+                                <option value="Cabos">Cabos</option>
+                                <option value="Tijuana">Tijuana</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="ubicacion">Ubicación:</label></td>
+                        <td colspan="3"><input type="text" id="ubicacion" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="imagenPieza">Imagen de la Pieza:</label></td>
+                        <td colspan="3">
+                            <input type="file" id="imagenPieza" accept="image/*" onchange="mostrarImagen(event)">
+                            <img id="vistaPrevia" src="#" alt="Vista Previa de la Imagen" style="display: none; max-width: 100%; max-height: 300px; margin-top: 10px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: center;">
+                            <button type="button" onclick="guardarDatos()">Guardar</button>
+                            <button type="button" onclick="imprimir()">Imprimir</button>
+                            <button type="button" onclick="window.location.href='main.html'">Regresar</button>
+                            <button onclick="window.location.href='list.html'">Lista de Piezas</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </main>
+    </div>
+    <script src="scripts/form.js"></script>
+    <script>
+        document.querySelectorAll('.expanding-input').forEach(function(element) {
+            element.style.height = (element.scrollHeight) + 'px';
+            element.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+                // Adjust the container height to fit the expanding content
+                document.getElementById('mainForm').style.height = 'auto';
+            });
+        });
+    </script>
+</body>
+</html>

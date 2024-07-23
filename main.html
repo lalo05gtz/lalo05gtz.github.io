@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div class="header">
+        <h2>Dimanor - John Deere</h2>
+    </div>
+    <div class="button-container">
+        <button onclick="window.location.href='form.html'">Grabar Formato</button>
+        <button onclick="window.location.href='list.html'">Lista de Piezas</button>
+        <button onclick="window.location.href='inven.html'"> Inventario</button>
+        <button onclick="window.location.href='repor.html'"> Reporte de Reclamo de Garantías</button>
+            <button onclick="window.location.href='prestamo.html'"> Prestamo de piezas </button>
+        <button onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+    <script>
+        function cerrarSesion() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
